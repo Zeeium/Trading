@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETF Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>ETF Portfolio</h1>
+    <canvas id="etfChart"></canvas>
+
+    <script>
+        async function fetchData() {
+            const response = await fetch("etf_data.json");
+            const data = await response.json();
+            return data;
+        }
+
+        async function updateChart() {
+            const etfData = await fetchData();
+            const labels = Object.keys(etfData);
+            const values = Object.values(etfData);
+
+            const ctx = document.getElementById("etfChart").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "ETF Prices",
+                        data: values,
+                        backgroundColor: ["red", "blue", "green", "purple"]
+                    }]
+                }
+            });
+        }
+
+        updateChart();
+        setInterval(updateChart, 60000);  // Refresh every minute
+    </script>
+</body>
+</html>
 
